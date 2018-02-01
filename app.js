@@ -48,8 +48,17 @@ let octopus = {
 	incrementCounter: function(){
 		model.currentCat.clickCount++;
 		catView.render();
+	},
+	adminActivator: function(){
+		if (adminPanel.style.visibility == 'hidden'){
+		adminPanel.style.visibility = 'visible';}
+		else {adminPanel.style.visibility = 'hidden';}
+	},
+	adminSaver: function(){
+		catView.countElem.textContent = catView.adminClicks.value;
+		catView.catNameElem.textContent = catView.adminName.value;
+		catView.catImageElem.src = catView.adminUrl.value;
 	}
-	
 };
 
 
@@ -59,17 +68,40 @@ let catView = {
 		this.catNameElem = document.getElementById('cat-name');
 		this.catImageElem = document.getElementById('cat-img');
 		this.countElem = document.getElementById('cat-count');
-
+		
+		this.adminPanel = document.getElementById('adminPanel');
+		this.adminActivate = document.getElementById('adminActivate');
+		this.adminCancel = document.getElementById('adminCancel');
+		this.adminName = document.getElementById('catName');
+		this.adminUrl = document.getElementById('catUrl');
+		this.adminClicks = document.getElementById('catClicks');
+		this.adminSave = document.getElementById('adminSave');
+		
 		this.catImageElem.addEventListener('click', function(){
 			octopus.incrementCounter();
+
 		});
+
+		this.adminActivate.addEventListener('click', function(){
+			octopus.adminActivator();
+		});
+
+		this.adminCancel.addEventListener('click', function(){
+			octopus.adminActivator();
+		});
+
+		this.adminSave.addEventListener('click', function(){
+			octopus.adminSaver();
+		});
+
 	this.render();
 	},
 	render: function(){
 		let currentCat = octopus.getCurrentCat();
-		this.countElem.textContext = currentCat.clickCount;
-		this.catNameElem.textContext = currentCat.name;
+		this.countElem.textContent = currentCat.clickCount;
+		this.catNameElem.textContent = currentCat.name;
 		this.catImageElem.src = currentCat.imgSrc;
+		this.adminPanel.style.visibility = 'hidden';
 	}
 };
 
@@ -98,6 +130,8 @@ let catListView = {
 			})(cat));
 
 			this.catListElem.appendChild(elem);
+
+
 		}
 	}
 };
